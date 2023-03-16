@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Golos Text', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameboard {
+    width: 310px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.gameboard .square {
+    width : 100px;
+    height: 100px;
+    border: 1px solid rgb(255, 87, 233);
+    border-radius : 10px;
+}
+
+.square {
+    display : flex;
+    justify-content : center;
+    align-items : center;
+}
+
+.circle {
+    width: 60px;
+    height: 60px;
+    border: 15px solid #00b5ff;
+    border-radius: 50%;
+}
+
+.cross {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cross::before, .cross::after {
+    content : " ";
+    height : 90px;
+    position : absolute;
+    background : red;
+    width : 20px;
+}
+
+.cross::before {
+    transform : rotate(-45deg)
+}
+
+.cross::after {
+    transform : rotate(45deg);
+}
