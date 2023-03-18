@@ -5,34 +5,40 @@ class TicTacToe {
         this.infoText = 'Circle goes first';
         this.turn = 'circle';
         this.squares = ["", "", "", "", "", "", "", "", ""];
-        this.bindEventHanlder = this.eventHandler.bind(this);
+
+        this.eventHandler = this.eventHandler.bind(this);
+        this.updateTitle = this.updateTitle.bind(this);
+        this.removeListener = this.removeListener.bind(this);
+        this.applyListeners = this.applyListeners.bind(this);
 
         this.start();
     }
 
     start() {
+        const { squares, updateTitle, gameBoard, applyListeners } = this;
         let newSquares = ``;
-        this.squares.forEach((_, index) => {
+        squares.forEach((_, index) => {
             newSquares += `<div class="square" id="${index}"></div>`
         })
-        this.title.innerText = this.turn;
-        this.gameBoard.innerHTML = newSquares;
-        this.applyListeners()
+        updateTitle('first');
+        gameBoard.innerHTML = newSquares;
+        applyListeners()
     }
 
     applyListeners() {
-        this.gameBoard.addEventListener('click', this.bindEventHanlder);
+        this.gameBoard.addEventListener('click', this.eventHandler);
     }
 
     checkWhoWins() {
-        const allSquares = document.querySelectorAll('.square');
-        const winningCombos = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ]
-
         let circleWins, crossWins;
+        const 
+            { updateTitle, removeListener } = this,
+            allSquares = document.querySelectorAll('.square'),
+            winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
 
         winningCombos.forEach(array => {
             if (this.turn === 'circle') {
@@ -40,26 +46,48 @@ class TicTacToe {
             } else {
                 crossWins = array.every(cell => allSquares[cell].firstChild?.classList.contains('cross'));
             }
-            if (circleWins) {
-                this.title.innerText = `${this.turn.toUpperCase()} Wins`;
-                this.removeListener();
-            } else if (crossWins) {
-                this.title.innerText = `${this.turn.toUpperCase()} Wins`;
-                this.removeListener();
-            }
         })
+        if (circleWins) {
+            updateTitle('win');
+            removeListener();
+        } else if (crossWins) {
+            updateTitle('win');
+            removeListener();
+        } else {
+            this.turn = this.turn === 'circle' ? 'cross' : 'circle';
+            updateTitle();
+        }
+    }
+
+    updateTitle(condition = 'turn') {
+        const { turn, title } = this;
+        
+        switch (condition) {
+            case 'turn' :
+                title.innerText = `${turn}'s turn`;
+                break;
+
+            case 'win':
+                title.innerText = `${turn} won`;
+                break;
+
+            case 'first' :
+                title.innerText = `${turn} goes first`;
+                break;
+
+            default :
+                break;
+        }
     }
 
     removeListener() {
-        this.gameBoard.removeEventListener('click', this.bindEventHanlder);
+        this.gameBoard.removeEventListener('click', this.eventHandler);
     }
 
     eventHandler(e) {
-        if (e.target.children.length === 0 && !e.target.className.includes(this.turn)) {
+        if (e.target.children.length === 0 && !e.target.className.includes('circle') && !e.target.className.includes('cross')) {
             e.target.innerHTML += `<div class="${this.turn}"></div>`;
             this.checkWhoWins();
-            this.turn = this.turn === 'circle' ? 'cross' : 'circle';
-            this.title.innerText = `${this.turn}'s turn`;
         }
     }
 }
