@@ -68,6 +68,16 @@ class TicTacToe {
         } else {
             this.turn = this.turn === 'circle' ? 'cross' : 'circle';
             updateTitle();
+
+            // draw functionality
+            let arraySquares = [...allSquares];
+            const isDraw = arraySquares.every(cell => {
+                console.log(cell.firstChild);
+                return cell.firstChild
+            })
+            if (isDraw) {
+                updateTitle('draw');
+            }
         }
     }
 
@@ -86,6 +96,9 @@ class TicTacToe {
             case 'first' :
                 title.innerText = `${turn} goes first`;
                 break;
+            
+            case 'draw' :
+                title.innerText = 'Draw!😞';
 
             default :
                 break;
